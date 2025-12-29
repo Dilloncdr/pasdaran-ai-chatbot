@@ -1,0 +1,43 @@
+# =========================
+# Secrets & config
+# =========================
+backend-php/config.php
+*.env
+
+# =========================
+# Node / build artifacts
+# =========================
+node_modules/
+dist/
+
+# =========================
+# Logs & runtime data
+# =========================
+logs/
+*.log
+
+# =========================
+# Database dumps
+# =========================
+*.sql
+*.db
+*.sqlite
+
+# =========================
+# Uploaded files / user data
+# =========================
+uploads/
+chat_uploads/
+
+# =========================
+# OS / Editor junk
+# =========================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# =========================
+# n8n local data
+# =========================
+.n8n/

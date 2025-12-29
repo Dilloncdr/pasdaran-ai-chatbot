@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>داشبورد اپراتور</title>
+
+  <link rel="stylesheet" href="operator-dashboard.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top bar with logo + status -->
+    <header class="top-bar">
+      <div class="top-bar-right">
+        <img
+          src="https://pasdaranbookcity.com/wp-content/uploads/2025/08/cropped-unnamed-1-1.png"
+          alt="لوگوی شهر کتاب پاسداران"
+          class="site-logo"
+        />
+        <div class="top-bar-text">
+          <h1>داشبورد گفتگوهای سایت</h1>
+          <span class="top-bar-subtitle">پاسخ‌گویی به چت‌های فروشگاه آنلاین</span>
+        </div>
+      </div>
+
+      <div class="top-bar-left">
+        <span class="status-pill status-online">اپراتور آنلاین</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- Sidebar: chat list -->
+      <aside id="chat-list" aria-label="فهرست گفتگوها">
+        <div class="sidebar-header">
+          <h2>گفتگوها</h2>
+          <span class="sidebar-caption">جدیدترین گفتگوها در بالا</span>
+        </div>
+        <!-- chat buttons injected by JS -->
+      </aside>
+
+      <!-- Chat detail panel -->
+      <section id="chat-detail" aria-label="جزئیات گفتگو" style="display:none;">
+        <div class="detail-header">
+          <div class="detail-header-main">
+            <button id="back-to-list">
+              <span class="back-icon">◀</span>
+              <span>فهرست گفتگوها</span>
+            </button>
+
+            <div class="detail-user-profile">
+              <div class="detail-avatar">
+                <span class="detail-avatar-icon">👤</span>
+              </div>
+              <div class="detail-user-meta">
+                <div id="user-name" class="detail-user-name">کاربر</div>
+                <div class="detail-user-row">
+                  <span id="user-phone" class="detail-user-phone">بدون شماره</span>
+                  <span class="meta-sep">•</span>
+                  <a id="user-url"
+                     class="detail-user-url is-empty"
+                     href="#"
+                     target="_blank"
+                     rel="noopener noreferrer">
+                    بدون صفحه
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- kept for compatibility / screen readers -->
+          <p id="current-user-title" class="visually-hidden"></p>
+        </div>
+
+        <div id="chat-history" class="chat-history">
+          <!-- messages injected by JS -->
+        </div>
+
+        <div id="reply-bar">
+          <textarea
+            id="reply-input"
+            placeholder="پیام خود را بنویسید و سپس روی «ارسال» کلیک کنید..."
+            rows="2"></textarea>
+          <button id="send-reply-btn">ارسال</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-brand">
+      شهر کتاب پاسداران
+    </footer>
+  </div>
+
+  <script src="operator-dashboard.js"></script>
+</body>
+</html>

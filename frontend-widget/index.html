@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>پشتیبانی فروشگاه</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Floating Chat Button -->
+  <div id="chat-toggle">
+    <img src="/bot/babot.svg" alt="chat icon" />
+  </div>
+
+  <!-- Chat Window -->
+  <div id="chat-widget" class="hidden">
+    <div id="chat-header">
+      <!-- RIGHT: title -->
+      <div class="header-right">
+        <span id="header-title">پشتیبانی</span>
+      </div>
+
+      <!-- CENTER: connect button (should appear ONLY inside chat screen) -->
+      <div class="header-center">
+        <button id="connect-operator-btn" type="button" class="header-connect-btn">
+          اتصال به کارشناس
+        </button>
+      </div>
+
+      <!-- LEFT: back arrow -->
+      <div class="header-left">
+        <button id="header-back" type="button" aria-label="بازگشت">›</button>
+      </div>
+    </div>
+
+
+
+    <div id="chat-body">
+      <!-- Main Menu -->
+      <div class="chat-screen active" id="menu-main">
+        <button class="chat-option" data-target="menu-order"> پیگیری سفارش</button>
+        <button class="chat-option" data-target="menu-payment"> مشکل در پرداخت</button>
+        <button class="chat-option" data-target="menu-stock"> استعلام موجودی و درخواست کالا</button>
+        <button class="chat-option" data-target="menu-faq"> سوالات متداول</button>
+        <button class="chat-option" data-target="menu-operator"> ارتباط با اپراتور</button>
+      </div>
+
+      <!-- 🧾 Order Tracking (prototype) -->
+      <div class="chat-screen" id="menu-order" data-parent="menu-main">
+        <h4>پیگیری سفارش</h4>
+        <label>شماره سفارش:</label>
+        <input type="text" id="order-number" placeholder="مثلاً 12345">
+        <button class="chat-option" id="check-order" type="button">بررسی وضعیت</button>
+        <div id="order-result" class="faq-box" style="margin-top:10px; display:none;"></div>
+        <button class="back-btn">بازگشت</button>
+      </div>
+
+
+
+      <!-- Payment Issues -->
+      <div class="chat-screen" id="menu-payment" data-parent="menu-main">
+        <h4>مشکل در پرداخت</h4>
+        <button class="chat-option" data-target="menu-payment-deducted">از حسابم پول کسر شد اما سفارشم ثبت نشد</button>
+        <button class="chat-option" data-target="menu-payment-refund">بازگشت وجه به حسابم انجام نشد</button>
+        <button class="chat-option" data-target="menu-payment-tara">درخواست پرداخت با تارا</button>
+        <button class="chat-option" data-target="menu-payment-card">درخواست پرداخت کارت به کارت</button>
+        <button class="back-btn">بازگشت</button>
+      </div>
+
+        <!-- 💳 Sub-menu: Payment deducted but order not created -->
+        <div class="chat-screen" id="menu-payment-deducted" data-parent="menu-payment">
+          <h4>از حسابم پول کسر شد اما سفارشم ثبت نشد</h4>
+          <div class="faq-box">
+            <p>
+              اگر مبلغ از حساب شما کسر شده باشه اما به حساب ما واریز نشده باشه 
+              سفارش شما ثبت نمیشه و مشکل از درگاه بانکی می‌باشد.  
+              مبلغ کسر شده از حساب شما نهایتاً تا ۷۲ ساعت به حساب شما عودت می‌شود.  
+              در غیر این‌صورت لطفاً با پشتیبانی سایت در ارتباط باشید.
+            </p>
+          </div>
+          <button class="back-btn">بازگشت</button>
+        </div>
+
+
+        <!-- 💳 Sub-menu: Payment by Card to Card -->
+        <div class="chat-screen" id="menu-payment-card" data-parent="menu-payment">
+          <h4>درخواست پرداخت کارت به کارت</h4>
+          <div class="faq-box">
+            <p>
+              در صورت وجود هرگونه ایراد در پرداخت آنلاین، شما می‌توانید با بخش پشتیبانی سایت از طریق
+              <a href="tel:02122549556" class="text-link">تماس تلفنی</a>
+              یا
+              <a href="https://wa.me/989202549556" target="_blank">پیام واتس‌اپ</a>
+              ارتباط حاصل نموده و بعد از هماهنگی‌های لازم، با واریز مبلغ صورت حساب بصورت کارت به کارت سفارش خود را تکمیل نمایید.
+            </p>
+        </div>
+        <button class="back-btn">بازگشت</button>
+      </div>
+      <!-- 💳 Sub-menu: Payment with Tara -->
+      <div class="chat-screen" id="menu-payment-tara" data-parent="menu-payment">
+        <h4>درخواست پرداخت با تارا</h4>
+        <div class="faq-box">
+          <p>
+            برای پرداخت با اپلیکیشن تارا بصورت آنلاین، ابتداً به دو روش 
+            <a href="tel:02122549556" class="text-link">تماس تلفنی</a>
+            و یا یادداشت سفارش همکاران ما را در پشتیبانی سایت شهر کتاب پاسداران مطلع نمایید.
+            سپس مراحل نهایی ثبت سفارش یعنی ورود به درگاه بانکی را انجام دهید ولی پرداخت ننمایید
+            تا سفارش شما برای ما نمایش داده شود.
+            پشتیبانی با شما تماس گرفته و ادامه مراحل پرداخت با اپلیکیشن اعتباری تارا انجام خواهد شد.
+          </p>
+        </div>
+        <button class="back-btn">بازگشت</button>
+      </div>
+      <!-- 💳 Sub-menu: Refund Not Received -->
+      <div class="chat-screen" id="menu-payment-refund" data-parent="menu-payment">
+        <h4>بازگشت وجه به حسابم انجام نشد</h4>
+        <div class="faq-box">
+          <p>
+            در صورت عدم بازگشت وجه به حساب شما لطفا با 
+            <a href="tel:02122549556" class="text-link">پشتیبانی</a> 
+            در ارتباط باشید.
+          </p>
+        </div>
+        <button class="back-btn">بازگشت</button>
+      </div>
+
+
+
+
+      <!-- Stock Inquiry Form -->
+      <div class="chat-screen" id="menu-stock" data-parent="menu-main">
+        <h4>استعلام موجودی و درخواست کالا</h4>
+
+        <!-- STEP 1: Stock search -->
+        <div id="stock-step-1">
+          <label>نام محصول:</label>
+          <input type="text" id="product-query" placeholder="مثلاً کتاب جنایت و مکافات">
+          <button id="check-stock-btn" class="chat-option" style="margin-top:10px;">بررسی موجودی</button>
+        </div>
+
+        <!-- Stock result -->
+        <div id="stock-result" class="faq-box" style="display:none; margin-top:10px;"></div>
+
+        <!-- STEP 2: Out-of-stock actions -->
+        <div id="stock-out-buttons" style="display:none; margin-top:10px;">
+          <button class="chat-option" id="stock-retry-btn">بررسی مجدد</button>
+          <button class="chat-option" id="open-request-form-btn">ثبت درخواست تامین کتاب</button>
+        </div>
+
+        <!-- STEP 3: Request Form -->
+        <div id="stock-request-panel" style="display:none; margin-top:10px;">
+          <p class="faq-box" style="background:#eef7ff; border:1px solid #c9e4ff;">
+            لطفاً نام کامل کتاب مورد نظر خود را وارد کنید.  
+            همچنین اگر از نام نویسنده، مترجم یا ناشر اطلاع دارید، وارد کردن آن به ما کمک می‌کند سریع‌تر کتاب را پیدا کنیم.
+          </p>
+
+          <label>نام:</label>
+          <input type="text" id="req-name">
+
+          <label>شماره تماس:</label>
+          <input type="text" id="req-phone" placeholder="مثلاً 09123456789">
+
+          <label>نام کتاب:</label>
+          <input type="text" id="req-book-name">
+
+          <label>نویسنده / مترجم (اختیاری):</label>
+          <input type="text" id="req-author">
+
+          <button class="chat-option" id="submit-request-btn" style="background:#dfffea;">
+            ثبت درخواست
+          </button>
+        </div>
+
+        <!-- Back -->
+        <button class="back-btn">بازگشت</button>
+      </div>
+
+
+
+      <!-- FAQ Menu -->
+      <div class="chat-screen" id="menu-faq" data-parent="menu-main">
+        <h4>سوالات متداول</h4>
+        <button class="chat-option" data-target="faq-delivery">سفارشم کی به دستم میرسه؟</button>
+        <button class="chat-option" data-target="faq-tracking">چطوری میتونم سفارشم رو پیگیری کنم؟</button>
+        <button class="chat-option" data-target="faq-shipping">هزینه ارسال چطوری محاسبه میشه؟</button>
+        <button class="chat-option" data-target="faq-contact">آدرس و شماره تماس مجموعه؟</button>
+        <button class="back-btn">بازگشت</button>
+      </div>
+
+      <!-- FAQ: Delivery Time -->
+      <div class="chat-screen" id="faq-delivery" data-parent="menu-faq">
+        <h4>سفارشم کی به دستم می‌رسه؟</h4>
+        <div class="faq-box">
+          <p>
+          اگر ساکن تهران هستید، می‌توانید از گزینه <strong>ارسال با پیک</strong> استفاده کنید. 
+          در این روش، سفارش شما حداکثر تا دو ساعت پس از ثبت سفارش در ساعات کاری شهر کتاب به پیک تحویل داده می‌شود 
+          و در همان روز به دست شما خواهد رسید.
+          </p>
+          <p>
+          سفارش پستی شما نیز تا دو روز کاری بعد از ثبت سفارش به اداره پست تحویل داده می‌شوند 
+          تا در اسرع وقت به دستتان برسند.
+          </p>
+        </div>
+        <button class="back-btn">بازگشت</button>
+      </div>
+
+      <!-- FAQ: Order Tracking -->
+      <div class="chat-screen" id="faq-tracking" data-parent="menu-faq">
+        <h4>چطوری میتونم سفارشم رو پیگیری کنم؟</h4>
+        <div class="faq-box">
+          <p>
+          برای پیگیری سفارش، به بخش <strong>«پیگیری سفارش»</strong> مراجعه کرده و شماره سفارش خود را وارد کنید تا وضعیت آن نمایش داده شود.
+          </p>
+          <p>
+          اگر کد رهگیری ۲۴ رقمی برای شما ارسال شده، می‌توانید از طریق
+          <a href="https://tracking.post.ir/" target="_blank" rel="noopener noreferrer">سامانه رهگیری پست</a>
+          بسته خود را رهگیری کنید.
+          </p>
+          <p>
+          همچنین می‌توانید از طریق شماره <strong>۰۲۱-۲۲۵۴۹۵۵۶ (داخلی ۴)</strong> با پشتیبانی سایت در ارتباط باشید.
+          </p>
+        </div>
+        <button class="back-btn">بازگشت</button>
+      </div>
+
+      <!-- FAQ: Shipping -->
+      <div class="chat-screen" id="faq-shipping" data-parent="menu-faq">
+        <h4>هزینه ارسال چطوری محاسبه میشه؟</h4>
+        <div class="faq-box">
+          <p>
+          هزینه ارسال با پیک بر اساس مسافت و تعرفه‌های پیک مشخص می‌شود.
+          بعد از اعمال ۳۰ هزار تومان تخفیف در هزینه، مابقی هزینه ارسال با پیک به عهده مشتری است.
+          </p>
+          <p>
+          برای ارسال با پست پیشتاز نیز، اگر مبلغ خرید شما بیش از یک میلیون تومان باشد، 
+          هزینه ارسال پستی آن به صورت رایگان برای شما محاسبه خواهد شد.
+          در غیر این صورت، هزینه ثابت پست و بسته‌بندی به مبلغ نهایی فاکتور شما اضافه خواهد شد.
+          </p>
+        </div>
+        <button class="back-btn">بازگشت</button>
+      </div>
+
+      <!-- FAQ: Contact -->
+      <div class="chat-screen" id="faq-contact" data-parent="menu-faq">
+        <h4>آدرس و شماره تماس مجموعه</h4>
+        <div class="faq-box">
+          <p>
+          <strong>آدرس:</strong> خیابان پاسداران، بوستان دوم (اخوان)، پلاک ۹<br>
+          <strong>ساعت کاری:</strong> همه‌روزه از ساعت ۹:۳۰ صبح تا ۱۰ شب<br>
+          <strong>تلفن تماس:</strong> ۰۲۱-۲۲۵۴۹۵۵۶ (داخلی ۴)<br>
+          <strong>ایمیل:</strong> <a href="mailto:Info@pasdaranbookcity.com">Info@pasdaranbookcity.com</a><br>
+          <strong>اینستاگرام:</strong> <a href="https://www.instagram.com/pasdaran_bookcity/?hl=en" target="_blank">Pasdaran_Bookcity</a><br>
+          <strong>شماره پشتیبانی در واتس‌اپ:</strong> <a href="https://wa.me/989202549556" target="_blank">09202549556</a><br>
+          <strong>گوگل‌مپ:</strong> <a href="https://maps.app.goo.gl/2fS8c2V3EaTtwdm99" target="_blank">مشاهده در نقشه</a>
+          </p>
+          <a href="https://pasdaranbookcity.com/contact-us/" target="_blank" class="contact-link">تماس با ما</a>
+        </div>
+        <button class="back-btn">بازگشت</button>
+      </div>
+
+      <!-- 🗣️ Contact Operator -->
+      <div class="chat-screen" id="menu-operator" data-parent="menu-main">
+        <h4>ارتباط با اپراتور</h4>
+
+        <!-- ✅ user info before chat -->
+        <div id="operator-register" class="faq-box">
+          <label>نام:</label>
+          <input type="text" id="operator-name" placeholder="مثلاً امید مقدم" />
+          <label>شماره تماس:</label>
+          <input type="text" id="operator-phone" placeholder="0912..." />
+          <button class="chat-option" id="start-operator-chat">شروع گفتگو</button>
+        </div>
+
+        <!-- ✅ hidden chat area (shows after name + phone entered) -->
+        <div id="chat-area" style="display:none;">
+          <div id="chat-container">
+            <div class="message bot">
+              سلام! 👋 من دستیار هوشمند شهر کتاب پاسداران هستم، چطور می‌تونم کمکتون کنم؟
+            </div>
+          </div>
+
+          <div id="chat-input-bar">
+            <button id="uploadBtn" class="icon-btn" title="ارسال فایل"></button>
+            <input type="file" id="fileInput" hidden />
+            <input type="text" id="userMessage" placeholder="پرسیدن سؤال..." />
+            <button id="sendMessage" class="icon-btn" title="ارسال پیام"></button>
+            <button id="voiceBtn" class="icon-btn" title="ارسال ویس"></button>
+          </div>
+        </div>
+
+              <button class="back-btn" style="margin-top:10px;">بازگشت</button>
+      </div> <!-- closes menu-operator -->
+
+    </div> <!-- ✅ closes chat-body -->
+
+  </div> <!-- closes chat-widget -->
+
+  <script src="script.js"></script>
+</body>
+</html>
+

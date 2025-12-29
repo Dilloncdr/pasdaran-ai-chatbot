@@ -1,0 +1,807 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600&display=swap');
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  direction: rtl;
+  background-color: #f9f9f9;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Force chat widget to hide when .hidden is applied */
+#chat-widget.hidden {
+  display: none !important;
+}
+
+/* Floating Button */
+#chat-toggle {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #3e5962;
+  color: white;
+  font-size: 22px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+#chat-toggle:hover {
+  background: #32464e;
+  transform: scale(1.05);
+}
+
+/* Chat Window */
+#chat-widget {
+  position: fixed;
+  bottom: 100px;
+  right: 25px;
+  width: 400px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.4s ease;
+}
+
+/* =========================
+   CHAT HEADER (FINAL + FIXED)
+   ========================= */
+/* NOTE:
+   - We override global "button { width:100% ... }" for header buttons.
+   - No absolute positioning, no ::before arrow.
+   - Layout matches reference: left title, center connect, right > back.
+*/
+#chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  direction: ltr;
+
+  height: 52px;
+  padding: 10px 12px;
+  background: #3e5962;
+  border-radius: 14px 14px 0 0;
+}
+
+/* LEFT: title */
+#chat-header .header-right {
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#header-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  direction: rtl;
+  line-height: 1;
+}
+
+/* CENTER: connect */
+#chat-header .header-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* RIGHT: back */
+#chat-header .header-left {
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Connect pill */
+#connect-operator-btn {
+  /* show/hide is controlled by JS inline style, but we keep default as none */
+  display: none;
+
+  /* critical: override global button */
+  width: auto !important;
+  margin: 0 !important;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  white-space: nowrap;
+  background: #ffffff;
+  color: #3e5962;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 18px;
+
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+#connect-operator-btn:hover {
+  background: #f1f5f6;
+  transform: translateY(-1px);
+}
+
+/* Back button (> symbol) */
+#header-back {
+  /* critical: override global button */
+  width: auto !important;
+  margin: 0 !important;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 36px;
+  font-weight: 300;
+  line-height: 1;
+
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  padding: 4px 6px;
+}
+
+#header-back:hover {
+  opacity: 0.85;
+}
+
+/* Keep the entire chat visible (no cut-off buttons) */
+#chat-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: auto;
+  overflow: visible !important; /* don't clip child elements */
+}
+
+/* Keep chat scroll inside container only */
+#menu-operator #chat-container {
+  flex: 1;
+  overflow-y: auto !important;
+  max-height: calc(100vh - 320px); /* adaptive scrolling space */
+  padding-bottom: 10px;
+}
+
+/* Adjust and slim down message input */
+#menu-operator #chat-input-bar {
+  background: #fff;
+  border: 1px solid #d9e1e4;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  gap: 8px;
+  height: 38px; /* thinner */
+  margin-top: 8px;
+  margin-bottom: 8px; /* extra breathing space above the bottom edge */
+}
+
+/* Slimmer message input bar (kept from your original; duplicate removed behavior-wise by being same target) */
+#menu-operator #chat-input-bar {
+  background: #fff;
+  border: 1px solid #d9e1e4;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  gap: 8px;
+  height: 38px; /* thinner */
+  margin-top: 8px;
+  margin-bottom: 6px; /* space above back button */
+}
+
+/* Buttons & Forms */
+.chat-option, .back-btn, button {
+  width: 100%;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 10px;
+  background: #f3f5f6;
+  cursor: pointer;
+  text-align: right;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  margin-bottom: 10px;
+}
+
+.chat-option:hover, .back-btn:hover {
+  background: #e1e7ea;
+}
+
+h4 {
+  margin: 0 0 15px;
+  color: #3e5962;
+  font-size: 16px;
+}
+
+label {
+  font-size: 14px;
+  color: #444;
+  display: block;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+input:focus {
+  border-color: #3e5962;
+}
+
+/* Menu visibility */
+.chat-screen {
+  display: none;
+}
+.chat-screen.active {
+  display: block;
+}
+
+/* Smooth opening animation */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.faq-box {
+  background: #f8fafb;
+  border: 1px solid #dfe6e9;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  line-height: 2;
+  font-size: 14px;
+  color: #333;
+  text-align: justify;
+  text-justify: inter-word;
+  box-sizing: border-box;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.faq-box a {
+  color: #3e5962;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.faq-box a:hover {
+  text-decoration: underline;
+}
+
+.contact-link {
+  display: inline-block;
+  margin-top: 10px;
+  background: #3e5962;
+  color: #fff !important;
+  padding: 10px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.contact-link:hover {
+  background: #32464e;
+}
+
+#faq-contact a {
+  color: #3e5962;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#faq-contact a:hover {
+  text-decoration: underline;
+}
+
+#faq-contact a[href*="https://wa.me/09202549556"] {
+  color: #25D366; /* WhatsApp green */
+  font-weight: 600;
+}
+
+#faq-contact a[href*="wa.me"]:hover {
+  text-decoration: underline;
+}
+
+.chat-screen.active .faq-box {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Make contact links look clean and inline */
+.text-link,
+.text-link:visited {
+  color: #3e5962;
+  text-decoration: none;
+  font-weight: 600;
+  background: none;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  display: inline;
+  cursor: pointer;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* ==== KEEP SCREENS SIMPLE & STABLE ==== */
+.chat-screen { display: none; }
+.chat-screen.active { display: block; }
+
+/* ==== Subtle, layout-safe transition on the container ==== */
+#chat-body {
+  transition: opacity 180ms ease;
+}
+#chat-body.fading {
+  opacity: 0;
+}
+
+/* Chat message styles */
+.message {
+  max-width: 85%;
+  padding: 8px 12px;
+  margin: 6px 0;
+  border-radius: 12px;
+  line-height: 1.6;
+  word-wrap: break-word;
+  font-size: 14px;
+}
+
+.message.user {
+  background-color: #d1e7dd;
+  align-self: flex-end;
+  text-align: right;
+  margin-left: auto;
+}
+
+.message.bot {
+  background-color: #f1f1f1;
+  text-align: right;
+  color: #333;
+}
+
+/* Media inside messages */
+.message img {
+  max-width: 100%;
+  border-radius: 10px;
+  display: block;
+}
+.message audio {
+  width: 100%;
+}
+
+/* Operator Chat Area */
+#menu-operator.active {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#chat-container {
+  flex: 1;
+  overflow-y: auto;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 8px;
+  max-height: 250px;
+}
+
+/* New input bar layout */
+#chat-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+}
+
+#chat-input-bar input[type="text"] {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Buttons (icons) */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0; /* hide text */
+  color: transparent; /* ensure no glyphs show */
+  opacity: 0.8;
+  transition: 0.2s;
+  width: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.icon-btn:hover {
+  opacity: 1;
+}
+
+/* Minimal SVG icons (no emojis) */
+#uploadBtn::before,
+#voiceBtn::before,
+#sendMessage::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 18px 18px;
+}
+
+/* Paperclip */
+#uploadBtn::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%233e5962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.2a2 2 0 01-2.83-2.83l8.49-8.49'/%3E%3C/svg%3E");
+}
+
+/* Microphone */
+#voiceBtn::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%233e5962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='2' width='6' height='11' rx='3'/%3E%3Cpath d='M5 10a7 7 0 0014 0'/%3E%3Cpath d='M12 19v3'/%3E%3C/svg%3E");
+}
+
+/* Voice recording state – stop square */
+#voiceBtn.recording::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%233e5962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='7' y='7' width='10' height='10' rx='2'/%3E%3C/svg%3E");
+}
+
+/* Send arrow */
+#sendMessage::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%233e5962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='22' y1='2' x2='11' y2='13'/%3E%3Cpolygon points='22 2 15 22 11 13 2 9 22 2'/%3E%3C/svg%3E");
+  transform: scaleX(-1); /* RTL */
+}
+
+/* Send button hidden until typing */
+#sendMessage {
+  display: none;
+}
+
+/* File & Voice icons show until typing starts */
+#uploadBtn, #voiceBtn {
+  display: inline;
+}
+
+/* === Operator Chat Background + Layout (match reference) === */
+#menu-operator #chat-container {
+  background-color: #f7f9fa;
+  background-image: url("https://pasdaranbookcity.com/wp-content/uploads/2025/10/bg-pbc.png");
+  background-repeat: repeat;
+  background-position: center center;
+  background-size: 180px 180px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 12px;
+  min-height: 420px;
+  max-height: 560px;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Adjust input bar for better look + spacing */
+#menu-operator #chat-input-bar {
+  background: #fff;
+  border: 1px solid #d9e1e4;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 34px;
+  padding: 4px 8px;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+#menu-operator #chat-input-bar input[type="text"] {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 12.5px;
+  padding: 4px 4px;
+  background: transparent;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Make buttons clean and uniform */
+#menu-operator .icon-btn {
+  font-size: 18px;
+  color: #3e5962;
+  opacity: 0.8;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+#menu-operator .icon-btn:hover {
+  opacity: 1;
+}
+
+/* Hide chat UI outside Operator menu */
+.chat-screen:not(#menu-operator) #chat-container,
+.chat-screen:not(#menu-operator) #chat-input-bar,
+.chat-screen:not(#menu-operator) #chat-controls {
+  display: none !important;
+}
+
+/* Extra safety for main menu */
+#menu-main #chat-container,
+#menu-main #chat-input-bar,
+#menu-main #chat-controls {
+  display: none !important;
+}
+
+/* Strong guard: even inside operator, show chat only when operator screen is active */
+#menu-operator:not(.active) #chat-container,
+#menu-operator:not(.active) #chat-input-bar,
+#menu-operator:not(.active) #chat-controls,
+#menu-operator:not(.active) #chat-container::before {
+  display: none !important;
+}
+
+/* Hide the old operator title and bottom back button inside operator screen */
+#menu-operator > h4 { display: none !important; }
+#menu-operator .back-btn { display: none !important; }
+
+/* === Chat Bubbles - Messenger Style === */
+#menu-operator .message {
+  display: inline-block;
+  max-width: 80%;
+  padding: 10px 14px;
+  margin: 6px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  word-wrap: break-word;
+  position: relative;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+/* Bot message (right side, bluish-green) */
+#menu-operator .message.bot {
+  background-color: #3e5962;
+  color: #fff;
+  align-self: flex-end;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+/* Bot bubble tail */
+#menu-operator .message.bot::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: -6px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid #3e5962;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+/* User message (left side, white) */
+#menu-operator .message.user {
+  background-color: #ffffff;
+  color: #333;
+  align-self: flex-start;
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+/* User bubble tail */
+#menu-operator .message.user::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -6px;
+  width: 0;
+  height: 0;
+  border-right: 6px solid #ffffff;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+/* Optional small spacing in chat flow */
+#menu-operator #chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+}
+
+#menu-operator {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#menu-operator #chat-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+#menu-operator:not(.active) {
+  display: none !important;
+}
+
+/* Feedback card inside bot message */
+.feedback-card { direction: rtl; text-align: right; }
+.feedback-card .sep { border: 0; border-top: 1px solid #ddd; margin: 10px 0; }
+.btn-row { display: flex; gap: 8px; }
+.feedback-btn { cursor: pointer; border-radius: 20px; padding: 6px 12px; font-size: 13px; }
+.feedback-btn.primary { background: #ffbf00; border: 1px solid #e5ab00; color: #222; }
+.feedback-btn.secondary { background: #fff; border: 1px solid #ccc; color: #333; }
+
+.success-box {
+  background: #d4f8d4 !important;
+  border: 1px solid #8cd98c !important;
+  color: #226622 !important;
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-top: 10px;
+  line-height: 1.8;
+}
+
+/* ============================
+   RESPONSIVE CHAT WIDGET FIX
+   ============================ */
+
+/* Tablets and small laptops */
+@media (max-width: 768px) {
+  #chat-widget {
+    width: 90vw !important;
+    right: 5vw !important;
+    bottom: 90px !important;
+    border-radius: 16px;
+  }
+
+  #chat-toggle {
+    bottom: 20px !important;
+    right: 20px !important;
+  }
+}
+
+/* Smartphones */
+@media (max-width: 480px) {
+  #chat-widget {
+    width: 92vw !important;
+    right: 4vw !important;
+    bottom: 85px !important;
+  }
+
+  #chat-header {
+    font-size: 14px !important;
+    padding: 12px !important;
+  }
+
+  .chat-option,
+  .back-btn {
+    font-size: 14px !important;
+    padding: 12px !important;
+  }
+
+  input {
+    font-size: 14px !important;
+    padding: 8px 10px !important;
+  }
+
+  #chat-container {
+    max-height: 55vh !important;
+  }
+
+  #chat-input-bar {
+    min-height: 38px !important;
+  }
+}
+
+.bot-line {
+  margin: 4px 0;
+  line-height: 1.6;
+}
+
+.bot-line a {
+  display: inline-block;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.product-card {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.product-title {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.product-card a {
+  display: inline-block;
+  margin-top: 4px;
+  color: #1e88e5;
+  text-decoration: none;
+}
+
+/* === FINAL FIX: bot no-result actions aligned === */
+#menu-operator .bot-noresult-block {
+  align-self: flex-end;
+  display: inline-flex;
+  flex-direction: column;
+  max-width: 80%;
+  gap: 10px;
+}
+
+#menu-operator .bot-noresult-block .message.bot {
+  display: inline-block;
+}
+
+#menu-operator .bot-noresult-block .bot-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+#menu-operator .bot-noresult-block .bot-action-btn {
+  width: auto !important;
+  padding: 8px 18px !important;
+  border-radius: 18px !important;
+  font-size: 14px !important;
+  margin: 0 !important;
+  white-space: nowrap;
+}
